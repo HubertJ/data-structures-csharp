@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace data_structures_csharp.SinglyLinkedList
+namespace data_structures_csharp.DoublyLinkedList
 {
   public class LinkedList<T> : ICollection<T>
   {
@@ -38,6 +38,7 @@ namespace data_structures_csharp.SinglyLinkedList
         var node = current;
         current = current.Next;
         node.Next = null;
+        node.Prev = null;
       }
 
       _head = null;
@@ -126,15 +127,14 @@ namespace data_structures_csharp.SinglyLinkedList
     {
       var comparer = EqualityComparer<T>.Default;
 
-      ListNode<T> previous = null;
       var current = _head;
       while (current != null)
       {
         if (comparer.Equals(current.Data, item) == true)
         {
-          if (previous != null)
+          if (current.Prev != null)
           {
-            RemoveFromMiddle(current, previous);
+            RemoveFromMiddle(current);
           }
           else
           {
@@ -142,8 +142,6 @@ namespace data_structures_csharp.SinglyLinkedList
           }
           return true;
         }
-
-        previous = current;
         current = current.Next;
       }
       return false;
@@ -202,6 +200,7 @@ namespace data_structures_csharp.SinglyLinkedList
     private void AddNodeToEnd(ListNode<T> node)
     {
       _tail.Next = node;
+      node.Prev = _tail;
       _tail = node;
       ++Count;
     }
@@ -221,36 +220,40 @@ namespace data_structures_csharp.SinglyLinkedList
       }
       else
       {
+        _head.Prev = null;
+        node.Prev = null;
         node.Next = null;
       }
 
       --Count;
     }
-    
+
     /// <summary>
     /// Remove the node passed in and update the neighbours in the list
     /// </summary>
     /// <param name="node">The node to remove from the list</param>
-    /// <param name="previous">The previous node in the list</param>
-    private void RemoveFromMiddle(ListNode<T> node, ListNode<T> previous)
+    private void RemoveFromMiddle(ListNode<T> node)
     {
       // Bridge over the value to remove it from the list.
-      previous.Next = node.Next;
+      node.Prev.Next = node.Next;
 
       // Special case, if the value was at the end we need to
       // update the tail we have stored.
-      if (previous.Next == null)
+      if (node.Next == null)
       {
-        _tail = previous;
+        _tail = node.Prev;
+        node.Prev = null;
       }
       else
       {
+        node.Next.Prev = node.Prev;
+        node.Prev = null;
         node.Next = null;
       }
 
       --Count;
     }
-    
+
     #endregion
 
     #region Fields

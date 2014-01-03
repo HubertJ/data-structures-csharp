@@ -1,6 +1,7 @@
 ﻿
 using System;
-using data_structures_csharp.SinglyLinkedList;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace data_structures_csharp
 {
@@ -8,22 +9,72 @@ namespace data_structures_csharp
   {
     static void Main(string[] args)
     {
-      var list = new LinkedList<int>();
+      var test = new LinkedList<int>();
+      
+      SinglyLinkedListTests();
+      DoublyLinkedListTests();
+
+      Console.ReadKey();
+    }
+
+    static void SinglyLinkedListTests()
+    {
+      var list = new SinglyLinkedList.LinkedList<int?>();
 
       list.Add(1);
       list.Add(2);
-      list.Add(3);
+      list.Add(1);
       list.Add(4);
-      list.Add(5);
 
-      Console.WriteLine("Number of items in list : {0}", list.Count);
-      Console.WriteLine("Does the list contain 0 : {0}", list.Contains(0));
-      Console.WriteLine("Does the list contain 3 : {0}", list.Contains(3));
+      Debug.Assert(list.Count == 4, "The count should equal the number of items added to the list");
+      Debug.Assert(list.Contains(0) == false, "The contains method should return false if the item is not in the list");
 
-      Console.WriteLine("Removing 3 from the list");
-      list.Remove(3);
+      Debug.Assert(list.Contains(1) == true, "The contains method should return true if the item is in the list");
+      Debug.Assert(list.Remove(1) == true, "It should be possible to remove an item in the list");
+      Debug.Assert(list.Count == 3, "The count should equal the number of items in the list");
+      Debug.Assert(list.Remove(1) == true, "It should be possible to remove an item in the list");
+      Debug.Assert(list.Count == 2, "The count should equal the number of items in the list");
+      Debug.Assert(list.Contains(1) == false, "The contains method should return false if the item is no longer in the list");
 
-      Console.WriteLine("Does the list contain 3 : {0}", list.Contains(3));
+      list.Clear();
+      Debug.Assert(list.Count == 0, "The list should be empty after calling clear");
+
+      list.Add(null);
+      list.Add(null);
+      Debug.Assert(list.Count == 2, "The count should equal the number of items added to the list");
+      Debug.Assert(list.Contains(null) == true, "The contains method should return true if the item is in the list");
+      Debug.Assert(list.Remove(null) == true, "It should be possible to remove an item in the list");
+      Debug.Assert(list.Count == 1, "The count should equal the number of items in the list");
+    }
+
+    static void DoublyLinkedListTests()
+    {
+      var list = new DoublyLinkedList.LinkedList<int?>();
+
+      list.Add(1);
+      list.Add(2);
+      list.Add(1);
+      list.Add(4);
+
+      Debug.Assert(list.Count == 4, "The count should equal the number of items added to the list");
+      Debug.Assert(list.Contains(0) == false, "The contains method should return false if the item is not in the list");
+
+      Debug.Assert(list.Contains(1) == true, "The contains method should return true if the item is in the list");
+      Debug.Assert(list.Remove(1) == true, "It should be possible to remove an item in the list");
+      Debug.Assert(list.Count == 3, "The count should equal the number of items in the list");
+      Debug.Assert(list.Remove(1) == true, "It should be possible to remove an item in the list");
+      Debug.Assert(list.Count == 2, "The count should equal the number of items in the list");
+      Debug.Assert(list.Contains(1) == false, "The contains method should return false if the item is no longer in the list");
+
+      list.Clear();
+      Debug.Assert(list.Count == 0, "The list should be empty after calling clear");
+
+      list.Add(null);
+      list.Add(null);
+      Debug.Assert(list.Count == 2, "The count should equal the number of items added to the list");
+      Debug.Assert(list.Contains(null) == true, "The contains method should return true if the item is in the list");
+      Debug.Assert(list.Remove(null) == true, "It should be possible to remove an item in the list");
+      Debug.Assert(list.Count == 1, "The count should equal the number of items in the list");
     }
   }
 }
