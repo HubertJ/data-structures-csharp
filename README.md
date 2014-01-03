@@ -16,8 +16,12 @@ A simple implementation of an internal singly linked list. Includes the ListNode
 
 
 More information about LinkedLists:
-http://www.syncfusion.com/resources/techportal/ebooks/datastructurespart1 (This was the first ebook I read on data structures and linked lists and it's where the outline for the first commit came from. I would highly recommend it for beginners like me)
-http://en.wikipedia.org/wiki/Linked_list 
-http://cslibrary.stanford.edu/103/
+
+1. http://www.syncfusion.com/resources/techportal/ebooks/datastructurespart1 
+This was the first ebook I read on data structures and linked lists and it's where the outline for the first commit came from. I would highly recommend it for beginners like me
+
+2. http://en.wikipedia.org/wiki/Linked_list 
+
+3. http://cslibrary.stanford.edu/103/
 
 :koala:
