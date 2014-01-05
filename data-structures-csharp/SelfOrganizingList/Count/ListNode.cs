@@ -1,19 +1,7 @@
-﻿
-using data_structures_csharp.Interfaces;
-namespace data_structures_csharp.DoublyLinkedList
+﻿using data_structures_csharp.Interfaces;
+
+namespace data_structures_csharp.SelfOrganizingList.Count
 {
-  /// <summary>
-  /// Class to represent a node within the DoublyLinkedList.
-  /// 
-  /// As well as holding the data, this node will also hold 
-  /// a reference to the next node in the list and the previous
-  /// node in the list.
-  /// 
-  /// e.g. For a node storing integers
-  /// null --| Prev | 1 | Next |-- -- | Prev | 3 | Next |-- null
-  /// 
-  /// </summary>
-  /// <typeparam name="T">The datatype to be stored in this node</typeparam>
   public class ListNode<T> : IListNode<T>
   {
     /// <summary>
@@ -52,6 +40,15 @@ namespace data_structures_csharp.DoublyLinkedList
     /// Will be null if this is the first node in the list.
     /// </summary>
     public ListNode<T> Prev
+    {
+      get;
+      internal set;
+    }
+
+    /// <summary>
+    /// Keeps count of the number of times this node is accessed
+    /// </summary>
+    public int Count
     {
       get;
       internal set;

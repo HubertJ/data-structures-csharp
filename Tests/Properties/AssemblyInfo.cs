@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("data-structures-csharp")]
-[assembly: AssemblyDescription("A library implementing various data structures I read about that day")]
+[assembly: AssemblyTitle("Tests")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HubertJ")]
-[assembly: AssemblyProduct("data-structures-csharp")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Tests")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d2b68fc2-f211-4cc8-a2fb-75cc265694f6")]
+[assembly: Guid("3a6f6c36-c216-442d-9423-8df195ff6a95")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -1,4 +1,5 @@
 ﻿
+using data_structures_csharp.Interfaces;
 namespace data_structures_csharp.SinglyLinkedList
 {
   /// <summary>
@@ -12,7 +13,7 @@ namespace data_structures_csharp.SinglyLinkedList
   /// 
   /// </summary>
   /// <typeparam name="T">The datatype to be stored in this node</typeparam>
-  public class ListNode<T>
+  public class ListNode<T> : IListNode<T>
   {
     /// <summary>
     /// The constructor for the list node. Takes the data in 

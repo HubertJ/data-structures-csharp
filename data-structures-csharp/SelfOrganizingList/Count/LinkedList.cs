@@ -1,17 +1,23 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using data_structures_csharp.Interfaces;
 
-namespace data_structures_csharp.SinglyLinkedList
+namespace data_structures_csharp.SelfOrganizingList.Count
 {
-  public class LinkedList<T> : IIndexList<T>
+  public class LinkedList<T> : Interfaces.IList<T>
   {
     #region IList<T> Members
 
     public void Add(T item)
     {
-      AddBack(item);
+      var node = new ListNode<T>(item);
+      AddBack(node);
+
+      ++Count;
     }
 
     /// <summary>
@@ -33,11 +39,11 @@ namespace data_structures_csharp.SinglyLinkedList
         {
           if (previous != null)
           {
-            RemoveFromMiddle(current, previous);
+            RemoveFromMiddle(current);
           }
           else
           {
-            RemoveFromStart(current);
+            RemoveFromStart();
           }
 
           --Count;
@@ -64,6 +70,7 @@ namespace data_structures_csharp.SinglyLinkedList
       {
         if (comparer.Equals(current.Data, item) == true)
         {
+          UpdateCountAndMove(current);
           return current;
         }
         current = current.Next;
@@ -161,179 +168,6 @@ namespace data_structures_csharp.SinglyLinkedList
 
     #endregion
 
-    #region IIndexList<T> Members
-
-    /// <summary>
-    /// Adds a new item to the front of the list. 
-    /// Complexity: O(1)
-    /// </summary>
-    /// <param name="item">The item to add to the front of the LinkedList</param>
-    public void AddFront(T item)
-    {
-      var node = new ListNode<T>(item);
-      AddFront(node);
-
-      ++Count;
-    }
-
-    /// <summary>
-    /// Adds a new item to the back of the list. 
-    /// Complexity: O(1)
-    /// </summary>
-    /// <param name="item">The item to add to the back of the LinkedList</param>
-    public void AddBack(T item)
-    {
-      var node = new ListNode<T>(item);
-      AddBack(node);
-
-      ++Count;
-    }
-    
-    /// <summary>
-    /// Adds a new item to the middle of the list at the given index
-    /// Complexity: O(n)
-    /// </summary>
-    /// <param name="item">The item to add to the back of the LinkedList</param>
-    public void AddIndex(T item, int index)
-    {
-      ValidateIndex(index);
-
-      var node = new ListNode<T>(item);
-      AddNodeAtIndex(node, index);
-
-      ++Count;
-    }
-
-    /// <summary>
-    /// Remove the item at the front of the list
-    /// Complexity: O(1)
-    /// </summary>
-    public void RemoveFront()
-    {
-      ValidateNotEmpty();
-
-      RemoveFromStart(_front);
-
-      --Count;
-    }
-
-    /// <summary>
-    /// Remove the item at the back of the list
-    /// Complexity: O(n)
-    /// </summary>
-    public void RemoveBack()
-    {
-      ValidateNotEmpty();
-
-      var current = _front;
-      while (current != null)
-      {
-        if (current.Next.Next == null)
-        {
-          RemoveAllAfterNode(current);
-        }
-        current = current.Next;
-      }
-
-      --Count;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="index"></param>
-    public void RemoveIndex(int index)
-    {
-      ValidateNotEmpty();
-      ValidateIndex(index);
-
-      if (index == 0)
-      {
-        RemoveFront();
-      }
-      else if (index == Count - 1)
-      {
-        RemoveBack();
-      }
-      else
-      {
-        RemoveMiddle(index);
-
-        --Count;
-      }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="item"></param>
-    /// <returns></returns>
-    public int FirstIndexOf(T item)
-    {
-      int index = 0;
-      var comparer = EqualityComparer<T>.Default;
-      var current = _front;
-      while (current != null)
-      {
-        if (comparer.Equals(current.Data, item) == true)
-        {
-          return index;
-        }
-        current = current.Next;
-        ++index;
-      }
-      return -1;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="item"></param>
-    /// <returns></returns>
-    public int LastIndexOf(T item)
-    {
-      int itemIndex = -1;
-      int currentIndex = 0;
-
-      var comparer = EqualityComparer<T>.Default;
-      var current = _front;
-      while (current != null)
-      {
-        if (comparer.Equals(current.Data, item) == true)
-        {
-          itemIndex = currentIndex;
-        }
-        current = current.Next;
-        ++currentIndex;
-      }
-      return itemIndex;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="index"></param>
-    /// <returns></returns>
-    public T Get(int index)
-    {
-      int currentIndex = 0;
-
-      var current = _front;
-      while (current != null)
-      {
-        if (currentIndex == index)
-        {
-          break;
-        }
-        ++currentIndex;
-        current = current.Next;
-      }
-
-      return current.Data;
-    }
-
-    #endregion
-
     #region IEnumerable<T> Members
 
     public IEnumerator<T> GetEnumerator()
@@ -356,9 +190,9 @@ namespace data_structures_csharp.SinglyLinkedList
     }
 
     #endregion
-        
+
     #region Internal
-    
+
     /// <summary>
     /// Validates that the index provided is within the valid range and throws
     /// and IndexOutOfRangeException if it is not.
@@ -433,6 +267,7 @@ namespace data_structures_csharp.SinglyLinkedList
     private void AddNodeToFront(ListNode<T> node)
     {
       node.Next = _front;
+      _front.Prev = node;
       _front = node;
     }
 
@@ -443,9 +278,10 @@ namespace data_structures_csharp.SinglyLinkedList
     private void AddNodeToBack(ListNode<T> node)
     {
       _back.Next = node;
+      node.Prev = _back;
       _back = node;
     }
-    
+
     /// <summary>
     /// Finds the current node occupying the index and then inserst the new 
     /// node in place. After this operation the node at the index will be 
@@ -482,10 +318,12 @@ namespace data_structures_csharp.SinglyLinkedList
 
       while (current != null)
       {
-        if (currentIndex == index - 1)
+        if (currentIndex == index)
         {
-          node.Next = current.Next;
-          current.Next = node;
+          node.Next = current;
+          node.Prev = current.Prev;
+          current.Prev.Next = node;
+          current.Prev = node;
           break;
         }
         ++currentIndex;
@@ -497,9 +335,10 @@ namespace data_structures_csharp.SinglyLinkedList
     /// Remove the node passed in and update the start of the list
     /// </summary>
     /// <param name="node">The node to remove from the list</param>
-    private void RemoveFromStart(ListNode<T> node)
+    private void RemoveFromStart()
     {
-      _front = node.Next;
+      var backup = _front;
+      _front = _front.Next;
 
       // If the list is now empty we need to remove the tail
       if (_front == null)
@@ -508,10 +347,11 @@ namespace data_structures_csharp.SinglyLinkedList
       }
       else
       {
-        node.Next = null;
+        _front.Prev = null;
+        backup.Next = null;
       }
     }
-    
+
     /// <summary>
     /// Updates the back of the list to put the value passed in at the end.
     /// Everything to the right of this node in the list will be lost
@@ -519,7 +359,9 @@ namespace data_structures_csharp.SinglyLinkedList
     /// <param name="penultimate">The value to put at the end</param>
     private void RemoveAllAfterNode(ListNode<T> newBack)
     {
+      newBack.Next.Prev = null;
       newBack.Next = null;
+
       _back = newBack;
     }
 
@@ -528,9 +370,9 @@ namespace data_structures_csharp.SinglyLinkedList
     /// </summary>
     /// <param name="node">The node to remove from the list</param>
     /// <param name="previous">The previous node in the list</param>
-    private void RemoveFromMiddle(ListNode<T> node, ListNode<T> previous)
+    private void RemoveFromMiddle(ListNode<T> node)
     {
-      // Bridge over the value to remove it from the list.
+      var previous = node.Prev;
       previous.Next = node.Next;
 
       // Special case, if the value was at the end we need to
@@ -541,7 +383,9 @@ namespace data_structures_csharp.SinglyLinkedList
       }
       else
       {
+        previous.Next.Prev = previous;
         node.Next = null;
+        node.Prev = null;
       }
     }
 
@@ -557,18 +401,73 @@ namespace data_structures_csharp.SinglyLinkedList
 
       while (current != null)
       {
-        if (currentIndex == index - 1)
+        if (currentIndex == index)
         {
-          RemoveFromMiddle(current.Next, current);
+          RemoveFromMiddle(current);
           break;
         }
         ++currentIndex;
         current = current.Next;
       }
     }
-    
+
+    /// <summary>
+    /// Moves the node to the front of the list
+    /// </summary>
+    /// <param name="current"></param>
+    private void UpdateCountAndMove(ListNode<T> node)
+    {
+      node.Count++;
+      
+      while (node.Prev != null && node.Prev.Count < node.Count)
+      {
+        node = ShiftLeft(node);
+      }
+    }
+
+    private ListNode<T> ShiftLeft(ListNode<T> node)
+    {
+      ListNode<T> prevprev = null;
+      var previous = node.Prev;
+      var next = node.Next;
+
+      if (previous == null)
+      {
+        return _front; // Already as far left as can be
+      }
+      else
+      {
+        prevprev = previous.Prev;
+        previous.Next = next;
+        previous.Prev = node;
+      }
+
+      if (prevprev != null)
+      {
+        prevprev.Next = node;
+      }
+      else
+      {
+        _front = node;
+      }
+
+      if (next != null)
+      {
+        next.Prev = previous;
+      }
+      else
+      {
+        _back = previous;
+      }
+
+      node.Prev = prevprev;
+      node.Next = previous;
+
+      return node;
+    }
+
     #endregion
-  
+
     #region Fields
 
     /// <summary>

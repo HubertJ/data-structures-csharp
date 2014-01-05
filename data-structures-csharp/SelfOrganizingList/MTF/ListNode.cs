@@ -1,6 +1,6 @@
 ﻿
 using data_structures_csharp.Interfaces;
-namespace data_structures_csharp.DoublyLinkedList
+namespace data_structures_csharp.SelfOrganizingList.MTF
 {
   /// <summary>
   /// Class to represent a node within the DoublyLinkedList.

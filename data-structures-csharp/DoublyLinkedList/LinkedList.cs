@@ -1,29 +1,73 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using data_structures_csharp.Interfaces;
 
 namespace data_structures_csharp.DoublyLinkedList
 {
-  public class LinkedList<T> : ICollection<T>
+  public class LinkedList<T> : IIndexList<T>
   {
-    #region ICollection<T> Members
+    #region IList<T> Members
 
-    /// <summary>
-    /// Adds a new item to the end of the list. 
-    /// Complexity: O(1)
-    /// </summary>
-    /// <param name="item">The item to add to the end of the LinkedList</param>
     public void Add(T item)
     {
-      var node = new ListNode<T>(item);
-      if (_head == null)
+      AddBack(item);
+    }
+
+    /// <summary>
+    /// Removes the first item that matches the item passed in. 
+    /// Complexity: O(n)
+    /// </summary>
+    /// <param name="item">The item to remove from the LinkedList</param>
+    /// <returns>True if item removed, otherwise false</returns>
+    public bool Remove(T item)
+    {
+      ValidateNotEmpty();
+      var comparer = EqualityComparer<T>.Default;
+
+      ListNode<T> previous = null;
+      var current = _front;
+      while (current != null)
       {
-        AddNodeEmptyList(node);
+        if (comparer.Equals(current.Data, item) == true)
+        {
+          if (previous != null)
+          {
+            RemoveFromMiddle(current);
+          }
+          else
+          {
+            RemoveFromStart();
+          }
+
+          --Count;
+          return true;
+        }
+
+        previous = current;
+        current = current.Next;
       }
-      else
+      return false;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    public IListNode<T> Get(T item)
+    {
+      var comparer = EqualityComparer<T>.Default;
+      var current = _front;
+      while (current != null)
       {
-        AddNodeToEnd(node);
+        if (comparer.Equals(current.Data, item) == true)
+        {
+          return current;
+        }
+        current = current.Next;
       }
+      return null;
     }
 
     /// <summary>
@@ -32,17 +76,16 @@ namespace data_structures_csharp.DoublyLinkedList
     /// </summary>
     public void Clear()
     {
-      var current = _head;
+      var current = _front;
       while (current != null)
       {
         var node = current;
         current = current.Next;
         node.Next = null;
-        node.Prev = null;
       }
 
-      _head = null;
-      _tail = null;
+      _front = null;
+      _back = null;
       Count = 0;
     }
 
@@ -54,17 +97,7 @@ namespace data_structures_csharp.DoublyLinkedList
     /// <returns>True if item found, otherwise false</returns>
     public bool Contains(T item)
     {
-      var comparer = EqualityComparer<T>.Default;
-      var current = _head;
-      while (current != null)
-      {
-        if (comparer.Equals(current.Data, item) == true)
-        {
-          return true;
-        }
-        current = current.Next;
-      }
-      return false;
+      return Get(item) != null ? true : false;
     }
 
     /// <summary>
@@ -75,9 +108,9 @@ namespace data_structures_csharp.DoublyLinkedList
     /// <param name="arrayIndex">The index of the array to start population at</param>
     public void CopyTo(T[] array, int arrayIndex)
     {
-      if (array.Length - arrayIndex < this.Count)
+      if (array == null)
       {
-        throw new ArgumentException("The array provided does not contain sufficient size after the arrayIndex to fill with contents of the LinkedList", "array");
+        throw new ArgumentNullException("array", "The array provided to copy into cannot be null");
       }
 
       if (arrayIndex < 0 || array.Length < arrayIndex)
@@ -85,15 +118,15 @@ namespace data_structures_csharp.DoublyLinkedList
         throw new ArgumentOutOfRangeException("arrayIndex", "The array index provided is out of range with respect to the array provided");
       }
 
-      if (array == null)
+      if (array.Length - arrayIndex < this.Count)
       {
-        throw new ArgumentNullException("array", "The array provided to copy into cannot be null");
+        throw new ArgumentException("The array provided does not contain sufficient size after the arrayIndex to fill with contents of the LinkedList", "array");
       }
 
-      var current = _head;
+      var current = _front;
       while (current != null)
       {
-        array[++arrayIndex] = current.Data;
+        array[arrayIndex++] = current.Data;
         current = current.Next;
       }
     }
@@ -109,55 +142,206 @@ namespace data_structures_csharp.DoublyLinkedList
     }
 
     /// <summary>
-    /// Whether or not the list is read only
-    /// Complexity: O(1)
+    /// The value at the front of the list
     /// </summary>
-    public bool IsReadOnly
+    public T Front
     {
-      get { return false; }
+      get { return _front.Data; }
     }
 
     /// <summary>
-    /// Removes the first item that matches the item passed in. 
+    /// The value at the back of the list
+    /// </summary>
+    public T Back
+    {
+      get { return _back.Data; }
+    }
+
+
+    #endregion
+
+    #region IIndexList<T> Members
+
+    /// <summary>
+    /// Adds a new item to the front of the list. 
+    /// Complexity: O(1)
+    /// </summary>
+    /// <param name="item">The item to add to the front of the LinkedList</param>
+    public void AddFront(T item)
+    {
+      var node = new ListNode<T>(item);
+      AddFront(node);
+
+      ++Count;
+    }
+
+    /// <summary>
+    /// Adds a new item to the back of the list. 
+    /// Complexity: O(1)
+    /// </summary>
+    /// <param name="item">The item to add to the back of the LinkedList</param>
+    public void AddBack(T item)
+    {
+      var node = new ListNode<T>(item);
+      AddBack(node);
+
+      ++Count;
+    }
+
+    /// <summary>
+    /// Adds a new item to the middle of the list at the given index
     /// Complexity: O(n)
     /// </summary>
-    /// <param name="item">The item to remove from the LinkedList</param>
-    /// <returns>True if item removed, otherwise false</returns>
-    public bool Remove(T item)
+    /// <param name="item">The item to add to the back of the LinkedList</param>
+    public void AddIndex(T item, int index)
     {
-      var comparer = EqualityComparer<T>.Default;
+      ValidateIndex(index);
 
-      var current = _head;
+      var node = new ListNode<T>(item);
+      AddNodeAtIndex(node, index);
+
+      ++Count;
+    }
+
+    /// <summary>
+    /// Remove the item at the front of the list
+    /// Complexity: O(1)
+    /// </summary>
+    public void RemoveFront()
+    {
+      ValidateNotEmpty();
+
+      RemoveFromStart();
+
+      --Count;
+    }
+
+    /// <summary>
+    /// Remove the item at the back of the list
+    /// Complexity: O(1)
+    /// </summary>
+    public void RemoveBack()
+    {
+      ValidateNotEmpty();
+
+      RemoveAllAfterNode(_back.Prev);
+
+      --Count;
+    }
+
+    public void RemoveIndex(int index)
+    {
+      ValidateNotEmpty();
+      ValidateIndex(index);
+
+      if (index == 0)
+      {
+        RemoveFront();
+      }
+      else if (index == Count - 1)
+      {
+        RemoveBack();
+      }
+      else
+      {
+        RemoveMiddle(index);
+
+        --Count;
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    public int FirstIndexOf(T item)
+    {
+      int index = 0;
+      var comparer = EqualityComparer<T>.Default;
+      var current = _front;
       while (current != null)
       {
         if (comparer.Equals(current.Data, item) == true)
         {
-          if (current.Prev != null)
-          {
-            RemoveFromMiddle(current);
-          }
-          else
-          {
-            RemoveFromStart(current);
-          }
-          return true;
+          return index;
         }
         current = current.Next;
+        ++index;
       }
-      return false;
+      return -1;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    public int LastIndexOf(T item)
+    {
+      int index = Count - 1;
+      var comparer = EqualityComparer<T>.Default;
+      var current = _back;
+      while (current != null)
+      {
+        if (comparer.Equals(current.Data, item) == true)
+        {
+          return index;
+        }
+        current = current.Prev;
+        --index;
+      }
+      return -1;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public T Get(int index)
+    {
+      int currentIndex = 0;
+
+      bool iterateFromFront = index < (Count / 2) ? true : false;
+
+      if (iterateFromFront == true)
+      {
+        var current = _front;
+        while (current != null)
+        {
+          if (currentIndex == index)
+          {
+            break;
+          }
+          ++currentIndex;
+          current = current.Next;
+        }
+        return current.Data;
+      }
+      else
+      {
+        var current = _back;
+        while (current != null)
+        {
+          if (currentIndex == index)
+          {
+            break;
+          }
+          --currentIndex;
+          current = current.Prev;
+        }
+        return current.Data;
+      }
+    }
+    
     #endregion
 
     #region IEnumerable<T> Members
 
-    /// <summary>
-    /// Gets an enumerator instance to enumerate through the LinkedList
-    /// </summary>
-    /// <returns>The generic IEnumerator instance</returns>
     public IEnumerator<T> GetEnumerator()
     {
-      var current = _head;
+      var current = _front;
       while (current != null)
       {
         yield return current.Data;
@@ -169,10 +353,6 @@ namespace data_structures_csharp.DoublyLinkedList
 
     #region IEnumerable Members
 
-    /// <summary>
-    /// Gets an enumerator instance to enumerate through the LinkedList
-    /// </summary>
-    /// <returns>The IEnumerator instance</returns>
     IEnumerator IEnumerable.GetEnumerator()
     {
       return ((IEnumerable<T>)this).GetEnumerator();
@@ -183,75 +363,221 @@ namespace data_structures_csharp.DoublyLinkedList
     #region Internal
 
     /// <summary>
-    /// Adds the node to the head and tail of this empty list and updates the count
+    /// Validates that the index provided is within the valid range and throws
+    /// and IndexOutOfRangeException if it is not.
     /// </summary>
-    /// <param name="node">The node to start the list off</param>
-    private void AddNodeEmptyList(ListNode<T> node)
+    /// <param name="index">The index to validate</param>
+    public void ValidateIndex(int index)
     {
-      _head = node;
-      _tail = node;
-      ++Count;
+      if (index < 0 || index > Count)
+      {
+        throw new IndexOutOfRangeException("The index provided is not within the valid range for this list");
+      }
+    }
+
+    /// <summary>
+    /// Validate that the list is not empty. Used for operations like removal
+    /// where we must have at least one thing in the list.
+    /// </summary>
+    public void ValidateNotEmpty()
+    {
+      if (Count == 0)
+      {
+        throw new InvalidOperationException("The list is empty");
+      }
+    }
+
+    /// <summary>
+    /// Adds a new node to the front of the list
+    /// </summary>
+    /// <param name="node">The node to add</param>
+    private void AddFront(ListNode<T> node)
+    {
+      if (_front == null)
+      {
+        AddNodeEmptyList(node);
+      }
+      else
+      {
+        AddNodeToFront(node);
+      }
+    }
+
+    /// <summary>
+    /// Adds a new node to the back of the list
+    /// </summary>
+    /// <param name="node">The node to add</param>
+    private void AddBack(ListNode<T> node)
+    {
+      if (_front == null)
+      {
+        AddNodeEmptyList(node);
+      }
+      else
+      {
+        AddNodeToBack(node);
+      }
     }
 
     /// <summary>
     /// Adds the node to the head and tail of this empty list and updates the count
     /// </summary>
-    /// <param name="node">The node to add to the end</param>
-    private void AddNodeToEnd(ListNode<T> node)
+    /// <param name="node">The node to start the list off</param>
+    private void AddNodeEmptyList(ListNode<T> node)
     {
-      _tail.Next = node;
-      node.Prev = _tail;
-      _tail = node;
-      ++Count;
+      _front = node;
+      _back = node;
+    }
+
+    /// <summary>
+    /// Adds the node to the front of an already populated list
+    /// </summary>
+    /// <param name="node">The node to add to the end</param>
+    private void AddNodeToFront(ListNode<T> node)
+    {
+      node.Next = _front;
+      _front.Prev = node;
+      _front = node;
+    }
+
+    /// <summary>
+    /// Adds the node to the back of an already populated list
+    /// </summary>
+    /// <param name="node">The node to add to the end</param>
+    private void AddNodeToBack(ListNode<T> node)
+    {
+      _back.Next = node;
+      node.Prev = _back;
+      _back = node;
+    }
+
+    /// <summary>
+    /// Finds the current node occupying the index and then inserst the new 
+    /// node in place. After this operation the node at the index will be 
+    /// the new node. The node that previously occupied this position will
+    /// be at index + 1
+    /// </summary>
+    /// <param name="node">The node to add</param>
+    /// <param name="index">The index position to add the node</param>
+    private void AddNodeAtIndex(ListNode<T> node, int index)
+    {
+      if (index == 0)
+      {
+        AddFront(node);
+      }
+      else if (index == Count)
+      {
+        AddBack(node);
+      }
+      else
+      {
+        AddMiddle(node, index);
+      }
+    }
+
+    /// <summary>
+    /// Add a node into the middle of the list
+    /// </summary>
+    /// <param name="node">The node to add</param>
+    /// <param name="index">The index position to add the node</param>
+    private void AddMiddle(ListNode<T> node, int index)
+    {
+      int currentIndex = 0;
+      var current = _front;
+
+      while (current != null)
+      {
+        if (currentIndex == index)
+        {
+          node.Next = current;
+          node.Prev = current.Prev;
+          current.Prev.Next = node;
+          current.Prev = node;
+          break;
+        }
+        ++currentIndex;
+        current = current.Next;
+      }
     }
 
     /// <summary>
     /// Remove the node passed in and update the start of the list
     /// </summary>
     /// <param name="node">The node to remove from the list</param>
-    private void RemoveFromStart(ListNode<T> node)
+    private void RemoveFromStart()
     {
-      _head = node.Next;
-
+      var backup = _front;
+      _front = _front.Next;
+      
       // If the list is now empty we need to remove the tail
-      if (_head == null)
+      if (_front == null)
       {
-        _tail = null;
+        _back = null;
       }
       else
       {
-        _head.Prev = null;
-        node.Prev = null;
-        node.Next = null;
+        _front.Prev = null;
+        backup.Next = null;
       }
+    }
 
-      --Count;
+    /// <summary>
+    /// Updates the back of the list to put the value passed in at the end.
+    /// Everything to the right of this node in the list will be lost
+    /// </summary>
+    /// <param name="penultimate">The value to put at the end</param>
+    private void RemoveAllAfterNode(ListNode<T> newBack)
+    {
+      newBack.Next.Prev = null;
+      newBack.Next = null;
+
+      _back = newBack;
     }
 
     /// <summary>
     /// Remove the node passed in and update the neighbours in the list
     /// </summary>
     /// <param name="node">The node to remove from the list</param>
+    /// <param name="previous">The previous node in the list</param>
     private void RemoveFromMiddle(ListNode<T> node)
     {
-      // Bridge over the value to remove it from the list.
-      node.Prev.Next = node.Next;
+      var previous = node.Prev;
+      previous.Next = node.Next;
 
       // Special case, if the value was at the end we need to
       // update the tail we have stored.
-      if (node.Next == null)
+      if (previous.Next == null)
       {
-        _tail = node.Prev;
-        node.Prev = null;
+        _back = previous;
       }
       else
       {
-        node.Next.Prev = node.Prev;
-        node.Prev = null;
+        previous.Next.Prev = previous;
         node.Next = null;
+        node.Prev = null;
       }
+    }
+    
+    /// <summary>
+    /// Add a node into the middle of the list
+    /// </summary>
+    /// <param name="node">The node to add</param>
+    /// <param name="index">The index position to add the node</param>
+    private void RemoveMiddle(int index)
+    {
+      int currentIndex = 0;
+      var current = _front;
 
-      --Count;
+      while (current != null)
+      {
+        if (currentIndex == index)
+        {
+          RemoveFromMiddle(current);
+          break;
+        }
+        ++currentIndex;
+        current = current.Next;
+      }
     }
 
     #endregion
@@ -261,12 +587,12 @@ namespace data_structures_csharp.DoublyLinkedList
     /// <summary>
     /// The start of the list
     /// </summary>
-    private ListNode<T> _head;
+    private ListNode<T> _front;
 
     /// <summary>
     /// The end of the list
     /// </summary>
-    private ListNode<T> _tail;
+    private ListNode<T> _back;
 
     #endregion
   }
