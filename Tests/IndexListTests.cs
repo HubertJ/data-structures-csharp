@@ -189,15 +189,17 @@ namespace Tests
     {
       var linkedList = CreateIndexList<int>();
 
+      linkedList.AddBack(0);
       linkedList.AddBack(1);
       linkedList.AddBack(2);
       linkedList.AddBack(3);
+      linkedList.AddBack(4);
 
-      Assert.IsTrue(linkedList.Contains(2), "The value we added should be contained in the list");
+      Assert.IsTrue(linkedList.Contains(3), "The value we added should be contained in the list");
 
-      linkedList.RemoveIndex(1);
+      linkedList.RemoveIndex(3);
 
-      Assert.IsFalse(linkedList.Contains(2), "The value we added should not longer be contained in the list after removing its index");
+      Assert.IsFalse(linkedList.Contains(3), "The value we added should not longer be contained in the list after removing its index");
     }
 
     #region Implementation Factory

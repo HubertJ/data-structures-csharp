@@ -22,6 +22,24 @@ namespace Tests
     }
   }
 
+  [TestClass]
+  public class MTFLinkedList_ListTests : ListTests
+  {
+    protected override IList<T> CreateList<T>()
+    {
+      return new data_structures_csharp.SelfOrganizingList.MTF.LinkedList<T>();
+    }
+  }
+
+  [TestClass]
+  public class CountLinkedList_ListTests : ListTests
+  {
+    protected override IList<T> CreateList<T>()
+    {
+      return new data_structures_csharp.SelfOrganizingList.Count.LinkedList<T>();
+    }
+  }
+
   public abstract class ListTests
   {
     [TestMethod]
@@ -129,10 +147,21 @@ namespace Tests
       list.Add(1);
       list.Add(2);
       list.Add(3);
+      list.Add(4);
+      list.Add(5);
+      list.Add(6);
 
       Assert.IsNotNull(list.Get(1), "Item should have been found in the list");
-      Assert.IsNotNull(list.Get(1), "Item should have been found in the list");
-      Assert.IsNotNull(list.Get(1), "Item should have been found in the list");
+      Assert.IsNotNull(list.Get(2), "Item should have been found in the list");
+      Assert.IsNotNull(list.Get(3), "Item should have been found in the list");
+      Assert.IsNotNull(list.Get(4), "Item should have been found in the list");
+      Assert.IsNotNull(list.Get(5), "Item should have been found in the list");
+      Assert.IsNotNull(list.Get(6), "Item should have been found in the list");
+
+      Assert.IsNull(list.Get(7), "Item should not have been found in the list");
+      Assert.IsNull(list.Get(8), "Item should not have been found in the list");
+      Assert.IsNull(list.Get(9), "Item should not have been found in the list");
+
     }
 
     #region Implementation Factory

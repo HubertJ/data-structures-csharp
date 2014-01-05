@@ -301,38 +301,8 @@ namespace data_structures_csharp.DoublyLinkedList
     /// <returns></returns>
     public T Get(int index)
     {
-      int currentIndex = 0;
-
-      bool iterateFromFront = index < (Count / 2) ? true : false;
-
-      if (iterateFromFront == true)
-      {
-        var current = _front;
-        while (current != null)
-        {
-          if (currentIndex == index)
-          {
-            break;
-          }
-          ++currentIndex;
-          current = current.Next;
-        }
-        return current.Data;
-      }
-      else
-      {
-        var current = _back;
-        while (current != null)
-        {
-          if (currentIndex == index)
-          {
-            break;
-          }
-          --currentIndex;
-          current = current.Prev;
-        }
-        return current.Data;
-      }
+      var node = GetAtIndex(index); 
+      return node.Data;
     }
     
     #endregion
@@ -565,19 +535,24 @@ namespace data_structures_csharp.DoublyLinkedList
     /// <param name="index">The index position to add the node</param>
     private void RemoveMiddle(int index)
     {
+      var node = GetAtIndex(index);
+      RemoveFromMiddle(node);
+    }
+
+    private ListNode<T> GetAtIndex(int index)
+    {
       int currentIndex = 0;
       var current = _front;
-
       while (current != null)
       {
         if (currentIndex == index)
         {
-          RemoveFromMiddle(current);
           break;
         }
         ++currentIndex;
         current = current.Next;
       }
+      return current;
     }
 
     #endregion
