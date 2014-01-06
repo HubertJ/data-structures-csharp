@@ -64,9 +64,9 @@
     <Compile Include="DoublyLinkedList\LinkedList.cs" />
     <Compile Include="DoublyLinkedList\ListNode.cs" />
     <Compile Include="Interfaces\IIndexList.cs" />
+    <Compile Include="Interfaces\IIteratorList.cs" />
     <Compile Include="Interfaces\IList.cs" />
     <Compile Include="Interfaces\IListNode.cs" />
-    <Compile Include="Interfaces\IVisitorList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelfOrganizingList\Count\LinkedList.cs" />
     <Compile Include="SelfOrganizingList\Count\ListNode.cs" />

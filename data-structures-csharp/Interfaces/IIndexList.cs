@@ -16,6 +16,11 @@ namespace data_structures_csharp.Interfaces
   /// 
   /// If however you just want to run through the different structures to see
   /// how they work feel free! 
+  /// 
+  /// These interfaces aren't of any use for a real list class. I am only using
+  /// them to make testing easier as I am duplicating a lot of logic for each
+  /// different list implementation and they should all behave the same apart 
+  /// from for the complexity.
   /// </summary>
   /// <typeparam name="T">The datatype to store in the List</typeparam>
   public interface IIndexList<T> : IList<T>

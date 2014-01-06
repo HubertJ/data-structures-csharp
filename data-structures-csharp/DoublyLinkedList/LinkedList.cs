@@ -5,10 +5,16 @@ using data_structures_csharp.Interfaces;
 
 namespace data_structures_csharp.DoublyLinkedList
 {
-  public class LinkedList<T> : IIndexList<T>
+  public class LinkedList<T> : IIndexList<T>, IIteratorList<T>
   {
     #region IList<T> Members
 
+    /// <summary>
+    /// Add an item to the end of the list.
+    /// Complexity : O(1) best, worst, average as we always add to 
+    /// known position (the end)
+    /// </summary>
+    /// <param name="item">The item to add</param>
     public void Add(T item)
     {
       AddBack(item);
@@ -16,7 +22,7 @@ namespace data_structures_csharp.DoublyLinkedList
 
     /// <summary>
     /// Removes the first item that matches the item passed in. 
-    /// Complexity: O(n)
+    /// Complexity: O(n) worst, average as we don't know position in list
     /// </summary>
     /// <param name="item">The item to remove from the LinkedList</param>
     /// <returns>True if item removed, otherwise false</returns>
@@ -43,7 +49,6 @@ namespace data_structures_csharp.DoublyLinkedList
           --Count;
           return true;
         }
-
         previous = current;
         current = current.Next;
       }
@@ -51,10 +56,12 @@ namespace data_structures_csharp.DoublyLinkedList
     }
 
     /// <summary>
-    /// 
+    /// Returns the node for the item passed in if it exists.
+    /// Complexity: O(n) worst, average. As we need to traverse the list to
+    /// get the item
     /// </summary>
-    /// <param name="item"></param>
-    /// <returns></returns>
+    /// <param name="item">The item we want the node for</param>
+    /// <returns>The node if it exists, otherwise false</returns>
     public IListNode<T> Get(T item)
     {
       var comparer = EqualityComparer<T>.Default;
@@ -72,18 +79,11 @@ namespace data_structures_csharp.DoublyLinkedList
 
     /// <summary>
     /// Clears the entire list.
-    /// Complexity: O(n)
+    /// Complexity: O(1) worst. We just remove all references at the front and back
+    /// and let the GC handle the rest. 
     /// </summary>
     public void Clear()
     {
-      var current = _front;
-      while (current != null)
-      {
-        var node = current;
-        current = current.Next;
-        node.Next = null;
-      }
-
       _front = null;
       _back = null;
       Count = 0;
@@ -91,7 +91,7 @@ namespace data_structures_csharp.DoublyLinkedList
 
     /// <summary>
     /// Checks to see if the item is contained within the list 
-    /// Complexity: O(n)
+    /// Complexity: O(n) worst. Traverses the list until the item is found.
     /// </summary>
     /// <param name="item">The item to search for in the LinkedList</param>
     /// <returns>True if item found, otherwise false</returns>
@@ -102,7 +102,8 @@ namespace data_structures_csharp.DoublyLinkedList
 
     /// <summary>
     /// Copies the entire LinkedList to the array provided by the caller.
-    /// Complexity: O(n)
+    /// Complexity: O(n) worst. Must traverse the entire list to copy all itms
+    /// into the array
     /// </summary>
     /// <param name="array">The array to populate</param>
     /// <param name="arrayIndex">The index of the array to start population at</param>
@@ -133,7 +134,7 @@ namespace data_structures_csharp.DoublyLinkedList
 
     /// <summary>
     /// The number of items currently stored in the LinkedList
-    /// Complexity: O(1)
+    /// Complexity: O(1) worst. We keep a count as things are added and removed
     /// </summary>
     public int Count
     {
@@ -143,6 +144,8 @@ namespace data_structures_csharp.DoublyLinkedList
 
     /// <summary>
     /// The value at the front of the list
+    /// Complexity: O(1) worst. We keep a reference to this at all times to 
+    /// make access easier
     /// </summary>
     public T Front
     {
@@ -151,20 +154,21 @@ namespace data_structures_csharp.DoublyLinkedList
 
     /// <summary>
     /// The value at the back of the list
+    /// Complexity: O(1) worst. We keep a reference to this at all times to 
+    /// make access easier
     /// </summary>
     public T Back
     {
       get { return _back.Data; }
     }
-
-
+    
     #endregion
 
     #region IIndexList<T> Members
 
     /// <summary>
     /// Adds a new item to the front of the list. 
-    /// Complexity: O(1)
+    /// Complexity: O(1) worst. As we are adding the item to a known position
     /// </summary>
     /// <param name="item">The item to add to the front of the LinkedList</param>
     public void AddFront(T item)
@@ -177,7 +181,7 @@ namespace data_structures_csharp.DoublyLinkedList
 
     /// <summary>
     /// Adds a new item to the back of the list. 
-    /// Complexity: O(1)
+    /// Complexity: O(1) worst. As we are adding the item to a known position
     /// </summary>
     /// <param name="item">The item to add to the back of the LinkedList</param>
     public void AddBack(T item)
@@ -190,7 +194,7 @@ namespace data_structures_csharp.DoublyLinkedList
 
     /// <summary>
     /// Adds a new item to the middle of the list at the given index
-    /// Complexity: O(n)
+    /// Complexity: O(n) worst. As we have to find the position in the list
     /// </summary>
     /// <param name="item">The item to add to the back of the LinkedList</param>
     public void AddIndex(T item, int index)
@@ -205,7 +209,7 @@ namespace data_structures_csharp.DoublyLinkedList
 
     /// <summary>
     /// Remove the item at the front of the list
-    /// Complexity: O(1)
+    /// Complexity: O(1) worst. As we are removing the item to a known position
     /// </summary>
     public void RemoveFront()
     {
@@ -218,7 +222,7 @@ namespace data_structures_csharp.DoublyLinkedList
 
     /// <summary>
     /// Remove the item at the back of the list
-    /// Complexity: O(1)
+    /// Complexity: O(1) worst. As we are removing the item to a known position
     /// </summary>
     public void RemoveBack()
     {
@@ -229,6 +233,11 @@ namespace data_structures_csharp.DoublyLinkedList
       --Count;
     }
 
+    /// <summary>
+    /// Remove the item from the middle of the list at the given index
+    /// Complexity: O(n) worst. As we have to find the position in the list
+    /// </summary>
+    /// <param name="item">The item to add to the back of the LinkedList</param>
     public void RemoveIndex(int index)
     {
       ValidateNotEmpty();
@@ -251,10 +260,12 @@ namespace data_structures_csharp.DoublyLinkedList
     }
 
     /// <summary>
-    /// 
+    /// Finds the first occurance of the item in the list
+    /// Complexity: O(n) worst. As we have to traverse the list to find
+    /// the item
     /// </summary>
-    /// <param name="item"></param>
-    /// <returns></returns>
+    /// <param name="item">The item to search for</param>
+    /// <returns>The index if it is found, otherwise false</returns>
     public int FirstIndexOf(T item)
     {
       int index = 0;
@@ -305,6 +316,108 @@ namespace data_structures_csharp.DoublyLinkedList
       return node.Data;
     }
     
+    #endregion
+    
+    #region IIteratorList<T> Members
+
+    /// <summary>
+    /// Adds a node to the list after the node supplied
+    /// 
+    /// Note: This implementation is unsafe as there are no checks to ensure 
+    /// that the supplied node is actually a part of this list. In order to 
+    /// do that we would need to keep a reference to the parent list within 
+    /// the node as well. I haven't done that yet. :) 
+    /// 
+    /// Complexity: O(1) as we have everything we need to update the list
+    /// </summary>
+    /// <param name="node">The node to add the new node after</param>
+    /// <param name="data">The data to add to the node</param>
+    public void AddAfter(IListNode<T> node, T data)
+    {
+      var oldNode = node as ListNode<T>; 
+      var newNode = new ListNode<T>(data);
+      if (oldNode == null)
+      {
+        AddNodeToFront(newNode);
+      }
+      else if (oldNode.Next == null)
+      {
+        AddNodeToBack(newNode);
+      }
+      else
+      {
+        newNode.Next = oldNode.Next;
+        oldNode.Next = newNode;
+        newNode.Prev = oldNode;
+        ++Count;
+      }
+    }
+
+    /// <summary>
+    /// Adds a node to the list before the node supplied
+    /// 
+    /// Note: This implementation is unsafe as there are no checks to ensure 
+    /// that the supplied node is actually a part of this list. In order to 
+    /// do that we would need to keep a reference to the parent list within 
+    /// the node as well. I haven't done that yet. :) 
+    /// 
+    /// Complexity: O(1) as we have everything we need to update the list
+    /// </summary>
+    /// <param name="node">The node to add the new node before</param>
+    /// <param name="data">The data to add to the node</param>
+    public void AddBefore(IListNode<T> node, T data)
+    {
+      var oldNode = node as ListNode<T>;
+      var newNode = new ListNode<T>(data);
+      if (oldNode == null)
+      {
+        AddNodeToBack(newNode);
+      }
+      else if (oldNode.Prev == null)
+      {
+        AddNodeToFront(newNode);
+      }
+      else
+      {
+        newNode.Next = oldNode;
+        newNode.Prev = oldNode;
+        oldNode.Prev = newNode;
+        ++Count;
+      }
+    }
+
+    /// <summary>
+    /// Removes the supplied node from the list
+    /// 
+    /// Note: This implementation is unsafe as there are no checks to ensure 
+    /// that the supplied node is actually a part of this list. In order to 
+    /// do that we would need to keep a reference to the parent list within 
+    /// the node as well. I haven't done that yet. :) 
+    /// 
+    /// Complexity: O(1) worst as we have all the information within the node
+    /// </summary>
+    /// <param name="node"></param>
+    public void Remove(IListNode<T> node)
+    {
+      ValidateNotEmpty();
+
+      var oldNode = node as ListNode<T>;
+      if (oldNode.Next == null)
+      {
+        RemoveBack();
+      }
+      else if (oldNode.Prev == null)
+      {
+        RemoveFront();
+      }
+      else
+      {
+        oldNode.Prev.Next = oldNode.Next;
+        oldNode.Next.Prev = oldNode.Prev;
+        --Count;
+      }
+    }
+
     #endregion
 
     #region IEnumerable<T> Members
@@ -570,5 +683,6 @@ namespace data_structures_csharp.DoublyLinkedList
     private ListNode<T> _back;
 
     #endregion
+
   }
 }

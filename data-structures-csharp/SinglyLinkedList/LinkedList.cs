@@ -5,7 +5,7 @@ using data_structures_csharp.Interfaces;
 
 namespace data_structures_csharp.SinglyLinkedList
 {
-  public class LinkedList<T> : IIndexList<T>
+  public class LinkedList<T> : IIndexList<T>, IIteratorList<T>
   {
     #region IList<T> Members
 
@@ -330,6 +330,124 @@ namespace data_structures_csharp.SinglyLinkedList
       }
 
       return current.Data;
+    }
+
+    #endregion
+
+    #region IIteratorList<T> Members
+
+    /// <summary>
+    /// Adds a node to the list after the node supplied
+    /// 
+    /// Note: This implementation is unsafe as there are no checks to ensure 
+    /// that the supplied node is actually a part of this list. In order to 
+    /// do that we would need to keep a reference to the parent list within 
+    /// the node as well. I haven't done that yet. :) 
+    /// 
+    /// Complexity: O(1) as we have everything we need to update the list
+    /// </summary>
+    /// <param name="node">The node to add the new node after</param>
+    /// <param name="data">The data to add to the node</param>
+    public void AddAfter(IListNode<T> node, T data)
+    {
+      var oldNode = node as ListNode<T>;
+      var newNode = new ListNode<T>(data);
+      if (oldNode == null)
+      {
+        AddNodeToFront(newNode);
+      }
+      else if (oldNode.Next == null)
+      {
+        AddNodeToBack(newNode);
+      }
+      else
+      {
+        newNode.Next = oldNode.Next;
+        oldNode.Next = newNode;
+        ++Count;
+      }
+    }
+
+    /// <summary>
+    /// Adds a node to the list before the node supplied
+    /// 
+    /// Note: This implementation is unsafe as there are no checks to ensure 
+    /// that the supplied node is actually a part of this list. In order to 
+    /// do that we would need to keep a reference to the parent list within 
+    /// the node as well. I haven't done that yet. :) 
+    /// 
+    /// Complexity: O(n) as we have to traverse the list to get the previous node
+    /// </summary>
+    /// <param name="node">The node to add the new node before</param>
+    /// <param name="data">The data to add to the node</param>
+    public void AddBefore(IListNode<T> node, T data)
+    {
+      var oldNode = node as ListNode<T>;
+      var newNode = new ListNode<T>(data);
+      if (oldNode == null)
+      {
+        AddNodeToBack(newNode);
+      }
+      else if (oldNode == _front)
+      {
+        AddNodeToFront(newNode);
+      }
+      else
+      {
+        var current = _front;
+        while (current != null)
+        {
+          if (current.Next == oldNode)
+          {
+            newNode.Next = current.Next;
+            current.Next = newNode;
+            ++Count;
+            return;
+          }
+          current = current.Next;
+        }
+      }
+    }
+
+    /// <summary>
+    /// Removes the supplied node from the list
+    /// 
+    /// Note: This implementation is unsafe as there are no checks to ensure 
+    /// that the supplied node is actually a part of this list. In order to 
+    /// do that we would need to keep a reference to the parent list within 
+    /// the node as well. I haven't done that yet. :) 
+    /// 
+    /// Complexity: O(n) worst as we have to traverse the list to get the
+    /// neighbours
+    /// </summary>
+    /// <param name="node"></param>
+    public void Remove(IListNode<T> node)
+    {
+      ValidateNotEmpty();
+
+      var oldNode = node as ListNode<T>;
+      if (oldNode == _back)
+      {
+        RemoveBack();
+      }
+      else if (oldNode == _front)
+      {
+        RemoveFront();
+      }
+      else
+      {
+        var current = _front;
+        while (current != null)
+        {
+          if (current.Next == oldNode)
+          {
+            current.Next = oldNode.Next;
+            --Count;
+            return;
+          }
+          current = current.Next;
+        }
+      }
     }
 
     #endregion
