@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayList\ArrayList.cs" />
     <Compile Include="DoublyLinkedList\LinkedList.cs" />
     <Compile Include="DoublyLinkedList\ListNode.cs" />
     <Compile Include="Interfaces\IIndexList.cs" />
