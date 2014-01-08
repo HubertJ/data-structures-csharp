@@ -9,6 +9,12 @@ namespace data_structures_csharp.SinglyLinkedList
   {
     #region IList<T> Members
 
+    /// <summary>
+    /// Add an item to the end of the list.
+    /// Complexity : O(1) best, worst, average as we always add to a known
+    /// position (the end)
+    /// </summary>
+    /// <param name="item">The data to add to the list</param>
     public void Add(T item)
     {
       AddBack(item);
@@ -157,7 +163,6 @@ namespace data_structures_csharp.SinglyLinkedList
     {
       get { return _back.Data; }
     }
-
 
     #endregion
 

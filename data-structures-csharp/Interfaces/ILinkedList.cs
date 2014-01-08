@@ -23,7 +23,7 @@ namespace data_structures_csharp.Interfaces
   /// from for the complexity.
   /// </summary>
   /// <typeparam name="T">The datatype to store in the list</typeparam>
-  public interface IList<T> : IEnumerable<T>
+  public interface ILinkedList<T> : IEnumerable<T>
   {
     void Add(T item);
 

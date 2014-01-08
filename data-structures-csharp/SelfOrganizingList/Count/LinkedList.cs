@@ -8,7 +8,7 @@ using data_structures_csharp.Interfaces;
 
 namespace data_structures_csharp.SelfOrganizingList.Count
 {
-  public class LinkedList<T> : Interfaces.IList<T>
+  public class LinkedList<T> : Interfaces.ILinkedList<T>
   {
     #region IList<T> Members
 

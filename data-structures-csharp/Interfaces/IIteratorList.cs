@@ -20,7 +20,7 @@ namespace data_structures_csharp.Interfaces
   /// from for the complexity.
   /// </summary>
   /// <typeparam name="T"></typeparam>
-  public interface IIteratorList<T> : IList<T>
+  public interface IIteratorList<T> : ILinkedList<T>
   {
     void AddAfter(IListNode<T> node, T data);
 

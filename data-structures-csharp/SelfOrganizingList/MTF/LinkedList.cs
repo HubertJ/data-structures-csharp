@@ -5,15 +5,19 @@ using data_structures_csharp.Interfaces;
 
 namespace data_structures_csharp.SelfOrganizingList.MTF
 {
-  public class LinkedList<T> : Interfaces.IList<T>
+  public class LinkedList<T> : Interfaces.ILinkedList<T>
   {
     #region IList<T> Members
 
+    /// <summary>
+    /// Adds an item to the front of the list under the assumption
+    /// that newly added items will be more likely to be accessed.
+    /// </summary>
+    /// <param name="item">The item to add to the list</param>
     public void Add(T item)
     {
       var node = new ListNode<T>(item);
-      AddBack(node);
-
+      AddFront(node);
       ++Count;
     }
 
@@ -55,10 +59,12 @@ namespace data_structures_csharp.SelfOrganizingList.MTF
     }
 
     /// <summary>
-    /// 
+    /// Get the node for the item supplied if it exists
+    /// Complexity : O(n) worst (as although the list will be organized we will
+    /// still need to go to the end of the list in the worst case) 
     /// </summary>
-    /// <param name="item"></param>
-    /// <returns></returns>
+    /// <param name="item">The item to get from the list</param>
+    /// <returns>The node if it exists, otherwise null</returns>
     public IListNode<T> Get(T item)
     {
       var comparer = EqualityComparer<T>.Default;
@@ -148,6 +154,7 @@ namespace data_structures_csharp.SelfOrganizingList.MTF
 
     /// <summary>
     /// The value at the front of the list
+    /// Complexity : O(1)
     /// </summary>
     public T Front
     {
@@ -156,13 +163,13 @@ namespace data_structures_csharp.SelfOrganizingList.MTF
 
     /// <summary>
     /// The value at the back of the list
+    /// Complexity : O(1)
     /// </summary>
     public T Back
     {
       get { return _back.Data; }
     }
-
-
+    
     #endregion
 
     #region IEnumerable<T> Members

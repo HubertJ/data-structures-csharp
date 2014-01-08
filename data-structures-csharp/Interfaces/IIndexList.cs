@@ -23,7 +23,7 @@ namespace data_structures_csharp.Interfaces
   /// from for the complexity.
   /// </summary>
   /// <typeparam name="T">The datatype to store in the List</typeparam>
-  public interface IIndexList<T> : IList<T>
+  public interface IIndexList<T> : ILinkedList<T>
   {
     void AddFront(T item);
 
