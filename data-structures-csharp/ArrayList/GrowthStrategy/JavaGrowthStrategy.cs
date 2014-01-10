@@ -1,4 +1,5 @@
-﻿using data_structures_csharp.Interfaces;
+﻿using System;
+using data_structures_csharp.Interfaces;
 
 namespace data_structures_csharp.ArrayList.GrowthStrategy
 {
@@ -13,7 +14,7 @@ namespace data_structures_csharp.ArrayList.GrowthStrategy
     /// <returns>The new size</returns>
     public int NewSize(int currentSize)
     {
-      return ((currentSize * 3) / 2) + 1;
+      return (int)Math.Ceiling((currentSize * 3.0) / 2.0);
     }
 
     #endregion

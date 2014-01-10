@@ -27,7 +27,7 @@ namespace data_structures_csharp.ArrayList.GrowthStrategy
     /// <returns>The new size</returns>
     public int NewSize(int currentSize)
     {
-      return (int)(1 + (currentSize * _multiplier));
+      return (int)Math.Ceiling(currentSize * _multiplier);
     }
 
     #endregion
