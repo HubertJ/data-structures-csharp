@@ -52,8 +52,11 @@
   <ItemGroup>
     <Compile Include="SelfOrganizingListTests.cs" />
     <Compile Include="IndexListTests.cs" />
-    <Compile Include="ListTests.cs" />
+    <Compile Include="LinkedListTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ArrayListTests.cs" />
+    <Compile Include="GrowthStrategyTests.cs" />
+    <Compile Include="SortedListTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\data-structures-csharp\data-structures-csharp.csproj">

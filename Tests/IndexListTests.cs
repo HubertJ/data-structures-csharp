@@ -25,7 +25,7 @@ namespace Tests
   public abstract class IndexListTests
   {
     [TestMethod]
-    public void AddFront()
+    public void AddFront_ItemsAddedToFront()
     {
       var linkedList = CreateIndexList<int>();
 
@@ -37,7 +37,7 @@ namespace Tests
     }
 
     [TestMethod]
-    public void AddBack()
+    public void AddBack_ItemsAddedToBack()
     {
       var linkedList = CreateIndexList<int>();
 
@@ -49,7 +49,7 @@ namespace Tests
     }
 
     [TestMethod]
-    public void AddIndexFront()
+    public void AddIndex_IndexAtFront_ItemAddedToFront()
     {
       var linkedList = CreateIndexList<int>();
 
@@ -64,7 +64,7 @@ namespace Tests
     }
 
     [TestMethod]
-    public void AddIndexBack()
+    public void AddIndex_IndexAtBack_ItemAddedToBack()
     {
       var linkedList = CreateIndexList<int>();
 
@@ -79,7 +79,7 @@ namespace Tests
     }
 
     [TestMethod]
-    public void AddIndexMiddle()
+    public void AddIndex_IndexInMiddle_ItemAddedToMiddle()
     {
       var linkedList = CreateIndexList<int>();
 
@@ -94,7 +94,7 @@ namespace Tests
 
     [TestMethod]
     [ExpectedException(typeof(IndexOutOfRangeException))]
-    public void AddIndexIndexOutOfRange()
+    public void AddIndex_IndexOutOfRange_IndexOutOfRangeExceptionThrown()
     {
       var linkedList = CreateIndexList<int>();
 
@@ -103,7 +103,7 @@ namespace Tests
 
     [TestMethod]
     [ExpectedException(typeof(InvalidOperationException))]
-    public void RemoveListEmptyException()
+    public void Remove_ListEmpty_InvalidOperationExceptionThrown()
     {
       var linkedList = CreateIndexList<int>();
 
@@ -112,7 +112,7 @@ namespace Tests
 
     [TestMethod]
     [ExpectedException(typeof(IndexOutOfRangeException))]
-    public void RemoveIndexEmptyException()
+    public void RemoveIndex_InvalidIndex_IndexOutOfRangeExceptionThrown()
     {
       var linkedList = CreateIndexList<int>();
       linkedList.Add(1);
@@ -121,7 +121,7 @@ namespace Tests
     }
     
     [TestMethod]
-    public void RemoveFront()
+    public void RemoveFront_ItemRemovedFromFront()
     {
       var linkedList = CreateIndexList<int>();
 
@@ -137,7 +137,7 @@ namespace Tests
     }
 
     [TestMethod]
-    public void RemoveBack()
+    public void RemoveBack_ItemRemovedFromBack()
     {
       var linkedList = CreateIndexList<int>();
 
@@ -153,7 +153,7 @@ namespace Tests
     }
 
     [TestMethod]
-    public void RemoveIndexFront()
+    public void RemoveIndex_IndexAtFront_ItemRemovedFromFront()
     {
       var linkedList = CreateIndexList<int>();
 
@@ -169,7 +169,7 @@ namespace Tests
     }
 
     [TestMethod]
-    public void RemoveIndexBack()
+    public void RemoveIndex_IndexAtBack_ItemRemovedFromBack()
     {
       var linkedList = CreateIndexList<int>();
 
@@ -185,7 +185,7 @@ namespace Tests
     }
 
     [TestMethod]
-    public void RemoveIndexMiddle()
+    public void RemoveIndex_IndexInMiddle_ItemRemovedFromMiddle()
     {
       var linkedList = CreateIndexList<int>();
 

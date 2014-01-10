@@ -65,8 +65,10 @@
     <Compile Include="ArrayList\GrowthStrategy\DoubleGrowthStrategy.cs" />
     <Compile Include="ArrayList\GrowthStrategy\GoldenGrowthStrategy.cs" />
     <Compile Include="ArrayList\GrowthStrategy\JavaGrowthStrategy.cs" />
+    <Compile Include="ArrayList\GrowthStrategy\MultiplierGrowthStrategy.cs" />
     <Compile Include="DoublyLinkedList\LinkedList.cs" />
     <Compile Include="DoublyLinkedList\ListNode.cs" />
+    <Compile Include="DoublyLinkedList\SortedLinkedList.cs" />
     <Compile Include="Interfaces\IGrowthStrategy.cs" />
     <Compile Include="Interfaces\IIndexList.cs" />
     <Compile Include="Interfaces\IIteratorList.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="SelfOrganizingList\MTF\ListNode.cs" />
     <Compile Include="SinglyLinkedList\LinkedList.cs" />
     <Compile Include="SinglyLinkedList\ListNode.cs" />
+    <Compile Include="Stack\Stack.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

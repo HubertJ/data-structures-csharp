@@ -5,45 +5,52 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Tests
 {
   [TestClass]
-  public class SinglyLinkedList_ListTests : ListTests
+  public class SinglyLinkedList_ListTests : LinkedListTests
   {
-    protected override IList<T> CreateList<T>()
+    protected override ILinkedList<T> CreateList<T>()
     {
       return new data_structures_csharp.SinglyLinkedList.LinkedList<T>();
     }
   }
 
   [TestClass]
-  public class DoublyLinkedList_ListTests : ListTests
+  public class DoublyLinkedList_ListTests : LinkedListTests
   {
-    protected override IList<T> CreateList<T>()
+    protected override ILinkedList<T> CreateList<T>()
     {
       return new data_structures_csharp.DoublyLinkedList.LinkedList<T>();
     }
   }
 
   [TestClass]
-  public class MTFLinkedList_ListTests : ListTests
+  public class MTFLinkedList_ListTests : LinkedListTests
   {
-    protected override IList<T> CreateList<T>()
+    protected override ILinkedList<T> CreateList<T>()
     {
       return new data_structures_csharp.SelfOrganizingList.MTF.LinkedList<T>();
+    }
+
+    [TestMethod]
+    public override void CopyTo_ValidArray_ItemsCopiedToArray()
+    {
+      // Do nothing at the momento
+      Assert.Fail();
     }
   }
 
   [TestClass]
-  public class CountLinkedList_ListTests : ListTests
+  public class CountLinkedList_ListTests : LinkedListTests
   {
-    protected override IList<T> CreateList<T>()
+    protected override ILinkedList<T> CreateList<T>()
     {
       return new data_structures_csharp.SelfOrganizingList.Count.LinkedList<T>();
     }
   }
 
-  public abstract class ListTests
+  public abstract class LinkedListTests
   {
     [TestMethod]
-    public void Clear()
+    public virtual void Clear_ListIsEmptied()
     {
       var linkedList = CreateList<int>();
 
@@ -57,18 +64,27 @@ namespace Tests
     }
 
     [TestMethod]
-    public void Contains()
+    public virtual void Contains_ItemInList_ItemFound()
     {
       var linkedList = CreateList<int>();
 
       linkedList.Add(1);
 
       Assert.IsTrue(linkedList.Contains(1), "The list should contain the value added");
+    }
+
+    [TestMethod]
+    public virtual void Contains_ItemNotInList_ItemNotFound()
+    {
+      var linkedList = CreateList<int>();
+
+      linkedList.Add(1);
+
       Assert.IsFalse(linkedList.Contains(4), "The list should not contain the value if it has not been added");
     }
 
     [TestMethod]
-    public void CopyTo()
+    public virtual void CopyTo_ValidArray_ItemsCopiedToArray()
     {
       var list = CreateList<int>();
 
@@ -86,7 +102,7 @@ namespace Tests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentOutOfRangeException))]
-    public void CopyToIncorrectArrayIndex()
+    public virtual void CopyTo_InvalidArrayIndex_ArgumentOutOfRangeExceptionThrown()
     {
       var list = CreateList<int>();
 
@@ -100,7 +116,7 @@ namespace Tests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentNullException))]
-    public void CopyToNullArray()
+    public virtual void CopyTo_NullArray_ArgumentNullExceptionThrown()
     {
       var list = CreateList<int>();
 
@@ -114,7 +130,7 @@ namespace Tests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CopyToArrayTooSmall()
+    public virtual void CopyTo_ArrayTooSmall_ArgumentExceptionThrown()
     {
       var list = CreateList<int>();
 
@@ -128,7 +144,7 @@ namespace Tests
 
 
     [TestMethod]
-    public void Count()
+    public virtual void Count_NumberOfItemsReturned()
     {
       var list = CreateList<int>();
 
@@ -140,7 +156,7 @@ namespace Tests
     }
 
     [TestMethod]
-    public void Get()
+    public virtual void Get_ItemsInList_ItemsReturned()
     {
       var list = CreateList<int>();
 
@@ -157,16 +173,28 @@ namespace Tests
       Assert.IsNotNull(list.Get(4), "Item should have been found in the list");
       Assert.IsNotNull(list.Get(5), "Item should have been found in the list");
       Assert.IsNotNull(list.Get(6), "Item should have been found in the list");
+    }
+
+    [TestMethod]
+    public virtual void Get_ItemsNotInList_NullReturned()
+    {
+      var list = CreateList<int>();
+
+      list.Add(1);
+      list.Add(2);
+      list.Add(3);
+      list.Add(4);
+      list.Add(5);
+      list.Add(6);
 
       Assert.IsNull(list.Get(7), "Item should not have been found in the list");
       Assert.IsNull(list.Get(8), "Item should not have been found in the list");
       Assert.IsNull(list.Get(9), "Item should not have been found in the list");
-
     }
 
     #region Implementation Factory
 
-    protected abstract IList<T> CreateList<T>();
+    protected abstract ILinkedList<T> CreateList<T>();
 
     #endregion 
   }

@@ -8,7 +8,7 @@ namespace Tests
   public class MTFLinkedList_SelfOrganizingTests
   {
     [TestMethod]
-    public void Organized()
+    public void Organize_ItemsAreAlwaysMovedToFront()
     {
       var list = new data_structures_csharp.SelfOrganizingList.MTF.LinkedList<int>();
 
@@ -18,7 +18,7 @@ namespace Tests
       list.Add(4);
       list.Add(5);
 
-      Assert.AreEqual(list.Front, 1, "The item at the start of the list should be the first item added");
+      Assert.AreEqual(list.Front, 5, "The item at the start of the list should be the last item added");
 
       list.Contains(3);
       Assert.AreEqual(list.Front, 3, "The item at the start should have been updated to have the last one accessed");
@@ -35,7 +35,7 @@ namespace Tests
   public class CountLinkedList_SelfOrganizingTests
   {
     [TestMethod]
-    public void Organized()
+    public void Organize_ItemsAreInOrderOfNumberOfAccesses()
     {
       var list = new data_structures_csharp.SelfOrganizingList.Count.LinkedList<int>();
 
