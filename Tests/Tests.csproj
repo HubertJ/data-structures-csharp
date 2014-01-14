@@ -57,6 +57,7 @@
     <Compile Include="ArrayListTests.cs" />
     <Compile Include="GrowthStrategyTests.cs" />
     <Compile Include="SortedListTests.cs" />
+    <Compile Include="TreeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\data-structures-csharp\data-structures-csharp.csproj">
